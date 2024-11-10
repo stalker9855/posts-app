@@ -1,0 +1,11 @@
+<div>
+
+<p>post works!</p>
+  @for (post of posts; track post.id) {
+    <p>{{post.title}}</p>
+    <p>{{post.content}}</p>
+  } @empty {
+
+  }
+</div>
+
