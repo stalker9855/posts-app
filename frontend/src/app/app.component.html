@@ -1,12 +1,27 @@
-<div style="padding: 10px; border: 2px black solid; display: flex; flex-direction: row;">
-      <a routerLink="/login">Login</a>
-      <a routerLink="/register">Register</a>
-      <a routerLink="/posts">Posts</a>
-</div>
+<nav class="bg-gray-800">
+  <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+    <div class="relative flex h-16 items-center justify-between">
+      <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+        <div class="hidden sm:ml-6 sm:block">
+          <div class="flex space-x-4">
+            <a *ngIf="!isLoggedIn" routerLink="/login" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">Login</a>
+            <a *ngIf="!isLoggedIn" routerLink="/register" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Register</a>
+            <a routerLink="/posts" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Posts</a>
+            <a *ngIf="isLoggedIn" routerLink="/profile" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Profile</a>
+            <a *ngIf="isLoggedIn" (click)="logout()" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Logout</a>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+
+</nav>
 
 <main class="main">
-  <div class="container">
-    <h1>Hello</h1>
+  <div class="mx-auto container">
 
     <router-outlet />
   </div>

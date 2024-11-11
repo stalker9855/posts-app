@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { PostAPIService } from './post-api.service';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import { AuthService } from './services/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,12 +10,28 @@ import { PostAPIService } from './post-api.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit{
-  title: Observable<string> = of('Hello');
+export class AppComponent implements OnInit {
+  isLoggedIn = false;
 
-  constructor(private postService: PostAPIService) {}
   ngOnInit(): void {
-      this.postService.fetchData().subscribe()
+      this.checkLoginStatus();
+  }
+
+  constructor(private router: Router, private authService: AuthService) {}
+
+  checkLoginStatus(): void {
+    this.isLoggedIn = !!localStorage.getItem('token');
+  }
+
+  logout(): void {
+    try {
+    this.authService.logout()
+    console.log('logout')
+    this.router.navigate(['/login'])
+
+    } catch (e) {
+      console.error(e)
+    }
   }
 
 }

@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { PostAPIService } from '../post-api.service';
 import { Post } from '../models/post.model';
-import { Observable } from 'rxjs';
-import { CommonModule } from '@angular/common';
+import { PostItemComponent } from '../post-item/post-item.component';
+import { PostAPIService } from '../services/post-api/post-api.service';
 
 @Component({
   selector: 'app-post',
   standalone: true,
-  imports: [CommonModule],
+  imports: [PostItemComponent],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss'
 })
@@ -16,9 +15,13 @@ export class PostComponent implements OnInit {
   constructor(private postService: PostAPIService) {
   }
   ngOnInit(): void {
-    this.postService.data$.subscribe((data) => {
+    this.fetchPosts()
+  }
+  fetchPosts(): void {
+    this.postService.getPosts().subscribe((data: Post[]) => {
       this.posts = data
     })
   }
+
 
 }
