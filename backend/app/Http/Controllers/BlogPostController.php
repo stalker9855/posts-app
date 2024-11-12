@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class BlogPostController extends Controller
 {
     public function index()
     {
-        $posts = BlogPost::with('user')->get()->makeHidden('user_id');
+        $posts = BlogPost::with('user')->orderBy('updated_at', 'desc')->get()->makeHidden('user_id');
         return response()->json($posts);
     }
 
@@ -31,6 +32,7 @@ class BlogPostController extends Controller
         $post->title = $request->title;
         $post->content = $request->content;
         $post->image_url = $imageUrl ?? null;
+        $post->user_id = Auth::id();
         $post->save();
 
         return response()->json($post);
@@ -77,7 +79,7 @@ class BlogPostController extends Controller
     {
         $post = BlogPost::findOrFail($id);
 
-        if ($post) {
+        if ($post && $post->user_id == Auth::id()) {
             $post->delete();
             return response()->json(['message' => 'Post has been deleted']);
         } else {
