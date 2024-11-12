@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 import { Post } from '../models/post.model';
 import { environment } from '../../environments/environment.development';
 import { CommonModule } from '@angular/common';
+import { PostAPIService } from '../services/post-api/post-api.service';
+import { CurrentUserService } from '../services/currentUser/current-user-service.service';
 
 @Component({
   selector: 'post-item',
@@ -15,8 +17,17 @@ export class PostItemComponent {
   @Input()
   post!: Post;
 
+  constructor(private postService: PostAPIService, private currentUserService: CurrentUserService) { }
+
+  get currentUser() {
+    return this.currentUserService.getCurrentUser()
+  }
+
   getImage(imageUrl: string): string {
-    let url = `http://localhost:8000/${imageUrl}`
-    return url
+    return environment.storageUrl + imageUrl
+  }
+
+  deletePost(id: number) {
+    this.postService.deletePost(id)
   }
 }

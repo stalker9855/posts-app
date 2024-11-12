@@ -1,6 +1,13 @@
 <div class="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden mb-6">
   <div class="p-4">
     <h2 class="text-xl font-semibold text-gray-800">{{ post.title }}</h2>
+    <p class="text-gray-500 text-xs">
+      Created: {{ post.createdAt | date:'medium' }}
+    </p>
+    <p class="text-gray-500 text-xs">
+      Updated: {{ post.updatedAt | date:'medium' }}
+    </p>
+
     <div class="content mt-4">
       <img
         *ngIf="post.image_url; else noImage"
@@ -11,8 +18,17 @@
       <ng-template #noImage>
         <img src="replace.svg" alt="No image available" class="w-full h-48 object-cover rounded-md mb-4" />
       </ng-template>
+
       <p class="text-gray-600 text-sm">{{ post.content }}</p>
       <p class="mt-4 text-gray-700 font-bold">{{ post.user.name }}</p>
     </div>
+
+    <button
+      *ngIf="post.user.id === currentUser?.id"
+      (click)="deletePost(post.id)"
+      class="mt-4 w-full bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600 focus:outline-none"
+    >
+      Delete
+    </button>
   </div>
 </div>

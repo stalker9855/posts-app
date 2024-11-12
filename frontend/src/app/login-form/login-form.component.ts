@@ -28,6 +28,7 @@ export class LoginFormComponent {
       this.authService.login(this.loginForm.value as { email: string; password: string }).subscribe({
         next: (response) => {
           localStorage.setItem('token', response.token);
+          this.authService.setLoggedIn(true)
           this.router.navigate(['/posts']);
         },
         error: (error) => {
