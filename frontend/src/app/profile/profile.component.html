@@ -8,8 +8,14 @@
       <h2 class="text-xl font-semibold text-gray-800">{{ currentUser?.name }}</h2>
       <p class="text-gray-600">{{ currentUser?.email }}</p>
     </div>
-
     <div class="mt-6 text-center">
     </div>
   </div>
+
+</div>
+
+<div>
+  @for (post of posts; track post.id) {
+    <post-item [post]="post" />
+  } @empty {}
 </div>

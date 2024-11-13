@@ -56,6 +56,10 @@ class BlogPostController extends Controller
             return response()->json(['message' => 'Post not found'], 404);
         }
 
+        if ($post->user_id != Auth::id()) {
+            return response()->json(['message' => 'This is not your post'], 403);
+        }
+
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
@@ -64,6 +68,7 @@ class BlogPostController extends Controller
 
         $post->title = $request->title;
         $post->content = $request->content;
+        $post->user_id = Auth::id();
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('public/images');

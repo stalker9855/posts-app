@@ -1,8 +1,5 @@
 <div>
   @for (post of posts; track post.id) {
     <post-item [post]="post" />
-  } @empty {
-
-  }
+  } @empty {}
 </div>
-

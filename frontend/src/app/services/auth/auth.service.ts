@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { Router } from '@angular/router';
 import { User } from '../../models/user.model';
+import { Post } from '../../models/post.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class AuthService {
 
   private loggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   public loggedIn$ = this.loggedInSubject.asObservable();
+
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -28,6 +30,7 @@ export class AuthService {
     return this.http.get<User>(environment.apiUrl + "/user", {headers})
   }
 
+
   login(data: { email: string; password: string }): Observable<any> {
     return this.http.post(`${environment.apiUrl}/login`, data);
   }
@@ -39,11 +42,7 @@ export class AuthService {
 
   logout() {
     try {
-    const token = localStorage.getItem('token')
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-    })
-    console.log('logout service')
+    const headers = this.getAuthHeaders()
     this.http.post(`${environment.apiUrl}/logout`, {}, { headers }).subscribe(response => {
         localStorage.removeItem('token')
         this.loggedInSubject.next(false)

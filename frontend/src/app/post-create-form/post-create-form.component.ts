@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { PostAPIService } from '../services/post-api/post-api.service';
 import { PostForm } from '../models/post-form.model';
 import { CurrentUserService } from '../services/currentUser/current-user-service.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-post-create-form',
@@ -18,12 +19,15 @@ export class PostCreateFormComponent {
   postForm = new FormGroup({
     title: new FormControl<string>('', [Validators.required]),
     content: new FormControl<string>('', [Validators.required]),
-    image: new FormControl<File | null>(null ?? this.file),
+    image: new FormControl<File | ''>('' ?? this.file),
     user_id: new FormControl<number | null>(null)
   })
 
-  constructor(private postService: PostAPIService, private currentUserService: CurrentUserService) {
-  }
+  constructor(
+    private postService: PostAPIService,
+    private currentUserService: CurrentUserService,
+    private toastr: ToastrService
+  ) { }
 
   get currentUser() {
     return this.currentUserService.getCurrentUser()
@@ -32,13 +36,13 @@ export class PostCreateFormComponent {
 
   onFileChange(event: any): void {
     const input = event.target as HTMLInputElement
-    if(input.files && input.files[0]) {
+    if (input.files && input.files[0]) {
       const file = input.files[0]
 
-      if(!this.allowedMimeTypes.includes(file.type)) {
+      if (!this.allowedMimeTypes.includes(file.type)) {
         alert('Only JPG, JPEG, GIF files');
         this.postForm.patchValue({
-          image: null
+          image: ''
         })
         return;
       }
@@ -61,8 +65,11 @@ export class PostCreateFormComponent {
       })
       this.postService.createPost(formData).subscribe(
         response => {
-          console.log('Post created successfully', response)
-        }
+          this.toastr.success('Success', 'Post created')
+        },
+        error => {
+          this.toastr.error('Error', 'Maximum 2 MB')
+        },
       )
     } else {
       console.log('Error')

@@ -1,14 +1,22 @@
 <div class="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden mb-6">
   <div class="p-4">
-    <h2 class="text-xl font-semibold text-gray-800">{{ post.title }}</h2>
-    <p class="text-gray-500 text-xs">
-      Created: {{ post.createdAt | date:'medium' }}
-    </p>
-    <p class="text-gray-500 text-xs">
-      Updated: {{ post.updatedAt | date:'medium' }}
-    </p>
+    <!-- Title -->
+    <div *ngIf="!isEditing; else editTitle">
+      <h2 class="text-xl font-semibold text-gray-800">{{ post.title }}</h2>
+    </div>
+    <ng-template #editTitle>
+      <input
+        type="text"
+        [(ngModel)]="editPost.title"
+        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+        placeholder="Edit title"
+      />
+    </ng-template>
 
-    <div class="content mt-4">
+    <!-- Dates -->
+
+    <!-- Content -->
+    <div class="content mt-4" *ngIf="!isEditing; else editContent">
       <img
         *ngIf="post.image_url; else noImage"
         [src]="getImage(post.image_url)"
@@ -18,11 +26,36 @@
       <ng-template #noImage>
         <img src="replace.svg" alt="No image available" class="w-full h-48 object-cover rounded-md mb-4" />
       </ng-template>
-
       <p class="text-gray-600 text-sm">{{ post.content }}</p>
-      <p class="mt-4 text-gray-700 font-bold">{{ post.user.name }}</p>
     </div>
 
+    <!-- Editable Content Fields -->
+    <ng-template #editContent>
+      <textarea
+        [(ngModel)]="editPost.content"
+        rows="4"
+        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+        placeholder="Edit content"
+      ></textarea>
+
+      <input
+        type="file"
+        (change)="onImageSelected($event)"
+        class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+        accept=".jpg, .jpeg, .png, .gif"
+      />
+    </ng-template>
+
+    <p class="mt-4 text-gray-700 font-bold">Created by {{ post.user.name }}</p>
+
+    <!-- Edit and Delete Buttons -->
+    <button
+      *ngIf="post.user.id === currentUser?.id && !isEditing"
+      (click)="startEditPost()"
+      class="mt-2 w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none"
+    >
+      Edit
+    </button>
     <button
       *ngIf="post.user.id === currentUser?.id"
       (click)="deletePost(post.id)"
@@ -30,5 +63,21 @@
     >
       Delete
     </button>
+
+    <!-- Edit/Save and Cancel Buttons -->
+    <div *ngIf="isEditing" class="flex mt-2">
+      <button
+        (click)="saveEditPost()"
+        class="w-full bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none"
+      >
+        Save
+      </button>
+      <button
+        (click)="cancelEditPost()"
+        class="w-full bg-gray-400 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-500 focus:outline-none ml-2"
+      >
+        Cancel
+      </button>
+    </div>
   </div>
 </div>
