@@ -1,4 +1,6 @@
-<div class="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden mb-6">
+<div
+  class="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden mb-6"
+>
   <div class="p-4">
     <!-- Title -->
     <div *ngIf="!isEditing; else editTitle">
@@ -14,6 +16,12 @@
     </ng-template>
 
     <!-- Dates -->
+    <p class="text-gray-500 text-xs">
+      Created: {{ post.created_at | date: "d MMMM h:mm a" }}
+    </p>
+    <p class="text-gray-500 text-xs">
+      Updated: {{ post.updated_at | date: "d MMMM h:mm a" }}
+    </p>
 
     <!-- Content -->
     <div class="content mt-4" *ngIf="!isEditing; else editContent">
@@ -24,7 +32,11 @@
         class="w-full h-48 object-cover rounded-md mb-4"
       />
       <ng-template #noImage>
-        <img src="replace.svg" alt="No image available" class="w-full h-48 object-cover rounded-md mb-4" />
+        <img
+          src="replace.svg"
+          alt="No image available"
+          class="w-full h-48 object-cover rounded-md mb-4"
+        />
       </ng-template>
       <p class="text-gray-600 text-sm">{{ post.content }}</p>
     </div>

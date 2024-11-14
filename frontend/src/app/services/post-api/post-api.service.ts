@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { Post } from '../../models/post.model';
 import { AuthService } from '../auth/auth.service';
@@ -16,7 +16,8 @@ export class PostAPIService {
 
   getPosts(): Observable<Post[]> {
     const headers = this.authService.getAuthHeaders();
-    return this.http.get<Post[]>(this.apiUrl + '/posts', { headers })
+    return this.http.get<Post[]>(this.apiUrl + '/posts', { headers }).pipe(
+    )
   }
   createPost(formData: FormData): Observable<Post> {
     const headers = this.authService.getAuthHeaders();
