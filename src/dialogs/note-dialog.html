@@ -1,0 +1,23 @@
+<div>
+<h2 mat-dialog-title>Create new Note</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Note Title</mat-label>
+    <input matInput [(ngModel)]="note.title" />
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Note Content</mat-label>
+    <textarea matInput [(ngModel)]="note.content"></textarea>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Pick a date</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="note.date" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button (click)="onNoClick()">Cancel</button>
+  <button mat-raised-button [mat-dialog-close]="note">Create Note</button>
+</mat-dialog-actions>
+</div>
