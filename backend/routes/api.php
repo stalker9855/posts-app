@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogPostController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\Rule;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,28 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::middleware('auth:sanctum')->put('/user', function (Request $request) {
+    $user = $request->user();
+
+    $validatedData = $request->validate([
+        'name' => 'string|max:255',
+        'email' => [
+            'email',
+            'max:255',
+            Rule::unique('users')->ignore($user->id),
+        ],
+        'password' => 'nullable|string|min:8|confirmed',
+    ]);
+
+    $user->fill($validatedData);
+    if (!empty($validatedData['password'])) {
+        $user->password = bcrypt($validatedData['password']);
+    }
+    $user->save();
+
+    return response()->json($user);
 });
 
 Route::middleware('auth:sanctum')->get('/userPosts', function (Request $request) {

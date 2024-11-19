@@ -34,20 +34,6 @@ export class PostItemComponent {
     return environment.storageUrl + imageUrl
   }
 
-  startEditPost(): void {
-    this.isEditing = true
-    this.editPost = {
-      id: this.post.id,
-      title: this.post.title,
-      content: this.post.content,
-      image: '',
-      user_id: this.post.user.id
-    }
-  }
-
-  cancelEditPost(): void {
-    this.isEditing = false
-  }
 
 
   saveEditPost(): void {
@@ -64,6 +50,22 @@ export class PostItemComponent {
       }, 2000)
     })
     this.isEditing = false;
+  }
+
+  startEditPost(): void {
+    this.isEditing = true
+    this.editPost = {
+      id: this.post.id,
+      title: this.post.title,
+      content: this.post.content,
+      image: '',
+      user_id: this.post.user.id
+    }
+  }
+
+
+  cancelEditPost(): void {
+    this.isEditing = false
   }
 
   deletePost(id: number) {

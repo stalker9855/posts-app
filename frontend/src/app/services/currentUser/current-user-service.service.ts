@@ -25,6 +25,10 @@ export class CurrentUserService {
     return this.currentUserSubject.value;
   }
 
+  editUser(formData: FormData) {
+    const headers = this.authService.getAuthHeaders()
+    return this.http.post<User>(environment.apiUrl + "/user" + "?_method=PUT", formData, {headers})
+  }
 
   getUserPosts(): Observable<Post[]> {
     const headers = this.authService.getAuthHeaders()
